@@ -7,11 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.himanshusajwan911.sudokuserver.exception.InvalidLevelException;
+import io.github.himanshusajwan911.sudokuserver.exception.NoSolutionException;
 import io.github.himanshusajwan911.sudokuserver.service.SudokuService;
 import io.github.himanshusajwan911.sudokuserver.service.SudokuService.Level;
 
@@ -47,6 +50,17 @@ public class SudokuServerController {
 			@RequestParam(name = "cellRemove", defaultValue = "0") int cellRemove) {
 
 		return new ResponseEntity<>(sudokuService.generateSudokuBoard(boardSize, cellRemove), HttpStatus.OK);
+	}
+
+	@PostMapping("/solve-sudoku-board")
+	public ResponseEntity<int[][]> solveSudokuBoard(@RequestBody int[][] sudokuBoard) {
+
+		boolean isSolvable = sudokuService.solveSudokuBoard(sudokuBoard);
+		if (!isSolvable) {
+			throw new NoSolutionException("No Solution exists for given board.");
+		}
+
+		return new ResponseEntity<>(sudokuBoard, HttpStatus.OK);
 	}
 
 }
