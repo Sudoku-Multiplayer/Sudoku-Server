@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import io.github.himanshusajwan911.sudokuserver.model.SudokuGame;
 import io.github.himanshusajwan911.sudokuserver.util.Util;
 
 @Service
@@ -23,6 +24,14 @@ public class SudokuService {
 		public int getCellRemovePercent() {
 			return cellRemovePercent;
 		}
+	}
+	
+	public SudokuGame generateSudokuGame(int boardSize, Level level, int playerLimit) {
+		
+		int[][] board = generateSudokuBoard(boardSize, level);
+		SudokuGame sudokuGame = new SudokuGame(board, level, playerLimit);
+		
+		return sudokuGame;
 	}
 
 	public int[][] generateSudokuBoard(int boardSize, Level level) {
