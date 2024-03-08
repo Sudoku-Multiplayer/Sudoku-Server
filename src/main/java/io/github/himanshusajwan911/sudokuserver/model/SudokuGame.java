@@ -11,7 +11,13 @@ public class SudokuGame {
 		NEW, RUNNING, FINISHED, FULL, PLAYER_ADDED, PLAYER_ALREADY_JOINED, NO_SUCH_GAME_EXISTS;
 	}
 
+	private String gameName;
+
+	private String hostName;
+
 	private int[][] board;
+
+	private int[][] solution;
 
 	private Level level;
 
@@ -23,29 +29,52 @@ public class SudokuGame {
 
 	private String id;
 
-	public SudokuGame(int[][] board, int playerLimit) {
+	public SudokuGame(int[][] board, int[][] solution, int playerLimit) {
 		this.board = board;
+		this.solution = solution;
 		this.playerLimit = playerLimit;
 		this.level = Level.EASY;
 		this.players = new ArrayList<Player>();
 	}
 
-	public SudokuGame(int[][] board, Level level, int playerLimit) {
+	public SudokuGame(int[][] board, int[][] solution, Level level, int playerLimit) {
 		this.board = board;
+		this.solution = solution;
 		this.level = level;
 		this.playerLimit = playerLimit;
 		this.players = new ArrayList<Player>();
 	}
 
-	public SudokuGame(int[][] board, Level level, int playerLimit, List<Player> players) {
+	public SudokuGame(int[][] board, int[][] solution, Level level, int playerLimit, List<Player> players) {
 		this.board = board;
+		this.solution = solution;
 		this.level = level;
 		this.playerLimit = playerLimit;
 		this.players = players;
 	}
 
+	public String getGameName() {
+		return gameName;
+	}
+
+	public void setGameName(String gameName) {
+		this.gameName = gameName;
+	}
+
+	public String getHostName() {
+		return hostName;
+	}
+
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+
 	public int[][] getBoard() {
 		return board;
+	}
+	
+	public int[][] getSolution() {
+		return solution;
 	}
 
 	public Level getLevel() {
