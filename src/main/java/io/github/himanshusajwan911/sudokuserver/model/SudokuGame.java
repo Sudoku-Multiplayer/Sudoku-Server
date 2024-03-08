@@ -15,7 +15,7 @@ public class SudokuGame {
 
 	private String hostName;
 
-	private int[][] board;
+	private int[][] initialBoard;
 
 	private int[][] solution;
 
@@ -30,7 +30,7 @@ public class SudokuGame {
 	private String id;
 
 	public SudokuGame(int[][] board, int[][] solution, int playerLimit) {
-		this.board = board;
+		this.initialBoard = board;
 		this.solution = solution;
 		this.playerLimit = playerLimit;
 		this.level = Level.EASY;
@@ -38,7 +38,7 @@ public class SudokuGame {
 	}
 
 	public SudokuGame(int[][] board, int[][] solution, Level level, int playerLimit) {
-		this.board = board;
+		this.initialBoard = board;
 		this.solution = solution;
 		this.level = level;
 		this.playerLimit = playerLimit;
@@ -46,7 +46,7 @@ public class SudokuGame {
 	}
 
 	public SudokuGame(int[][] board, int[][] solution, Level level, int playerLimit, List<Player> players) {
-		this.board = board;
+		this.initialBoard = board;
 		this.solution = solution;
 		this.level = level;
 		this.playerLimit = playerLimit;
@@ -70,7 +70,7 @@ public class SudokuGame {
 	}
 
 	public int[][] getBoard() {
-		return board;
+		return initialBoard;
 	}
 	
 	public int[][] getSolution() {
