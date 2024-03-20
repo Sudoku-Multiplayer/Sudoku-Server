@@ -4,6 +4,8 @@ import io.github.himanshusajwan911.sudokuserver.service.SudokuService.Level;
 
 public class CreateGameRequest {
 
+	private String gameName;
+	
 	private Player player;
 
 	private int boardSize;
@@ -11,6 +13,14 @@ public class CreateGameRequest {
 	private Level level;
 
 	private int playerLimit;
+
+	public String getGameName() {
+		return gameName;
+	}
+
+	public void setGameName(String gameName) {
+		this.gameName = gameName;
+	}
 
 	public Player getPlayer() {
 		return player;
