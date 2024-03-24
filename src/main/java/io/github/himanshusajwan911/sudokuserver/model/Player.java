@@ -4,29 +4,42 @@ import java.util.Objects;
 
 public class Player {
 
+	public enum PlayerType {
+		REGULAR, GUEST
+	}
+
 	private String name;
 	private int id;
-	
-	public Player(String name, int id) {
-		super();
+	private PlayerType playerType;
+
+	public Player(String name, int id, PlayerType playerType) {
 		this.name = name;
 		this.id = id;
+		this.playerType = playerType;
 	}
 
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public PlayerType getPlayerType() {
+		return playerType;
+	}
+
+	public void setPlayerType(PlayerType playerType) {
+		this.playerType = playerType;
 	}
 
 	@Override
@@ -48,7 +61,7 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "Player [name=" + name + ", id=" + id + "]";
+		return "Player [name=" + name + ", id=" + id + ", playerType=" + playerType + "]";
 	}
 
 }
