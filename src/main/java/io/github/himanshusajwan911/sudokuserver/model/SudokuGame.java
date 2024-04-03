@@ -29,29 +29,30 @@ public class SudokuGame {
 
 	private SudokuGameStatus status;
 
-	private String id;
+	private String gameId;
 
-	public SudokuGame(int[][] board, int[][] solution, int playerLimit) {
-		this.initialBoard = board;
-		this.currentBoard = board;
+	public SudokuGame(int[][] initialBoard, int[][] currentBoard, int[][] solution, int playerLimit) {
+		this.initialBoard = initialBoard;
+		this.currentBoard = currentBoard;
 		this.solution = solution;
 		this.playerLimit = playerLimit;
 		this.level = Level.EASY;
 		this.players = new ArrayList<Player>();
 	}
 
-	public SudokuGame(int[][] board, int[][] solution, Level level, int playerLimit) {
-		this.initialBoard = board;
-		this.currentBoard = board;
+	public SudokuGame(int[][] initialBoard, int[][] currentBoard, int[][] solution, Level level, int playerLimit) {
+		this.initialBoard = initialBoard;
+		this.currentBoard = currentBoard;
 		this.solution = solution;
 		this.level = level;
 		this.playerLimit = playerLimit;
 		this.players = new ArrayList<Player>();
 	}
 
-	public SudokuGame(int[][] board, int[][] solution, Level level, int playerLimit, List<Player> players) {
-		this.initialBoard = board;
-		this.currentBoard = board;
+	public SudokuGame(int[][] initialBoard, int[][] currentBoard, int[][] solution, Level level, int playerLimit,
+			List<Player> players) {
+		this.initialBoard = initialBoard;
+		this.currentBoard = currentBoard;
 		this.solution = solution;
 		this.level = level;
 		this.playerLimit = playerLimit;
@@ -77,9 +78,13 @@ public class SudokuGame {
 	public int[][] getInitialBoard() {
 		return initialBoard;
 	}
-	
+
 	public int[][] getCurrentBoard() {
 		return currentBoard;
+	}
+
+	public void setCurrentBoard(int[][] currentBoard) {
+		this.currentBoard = currentBoard;
 	}
 
 	public int[][] getSolution() {
@@ -122,12 +127,16 @@ public class SudokuGame {
 		return players;
 	}
 
-	public String getId() {
-		return id;
+	public String getGameId() {
+		return gameId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setGameId(String gameId) {
+		this.gameId = gameId;
+	}
+
+	public void updateCurrentBoard(int value, int row, int column) {
+		this.currentBoard[row][column] = value;
 	}
 
 }
