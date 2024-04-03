@@ -44,7 +44,7 @@ public class Player {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name);
+		return Objects.hash(id, playerType);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class Player {
 		if (getClass() != obj.getClass())
 			return false;
 		Player other = (Player) obj;
-		return id == other.id && Objects.equals(name, other.name);
+		return id == other.id && playerType == other.playerType;
 	}
 
 	@Override
