@@ -14,9 +14,4 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>("Malformed request body: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler(NoSuchPlayerExistsException.class)
-	public ResponseEntity<String> handleNoSuchPlayerExistsException(NoSuchPlayerExistsException ex) {
-		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-	}
-
 }
