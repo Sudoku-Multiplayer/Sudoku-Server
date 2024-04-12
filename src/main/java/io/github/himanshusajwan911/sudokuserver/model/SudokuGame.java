@@ -16,7 +16,7 @@ public class SudokuGame {
 	private String hostName;
 
 	private int[][] initialBoard;
-	
+
 	private int[][] currentBoard;
 
 	private int[][] solution;
@@ -99,8 +99,13 @@ public class SudokuGame {
 		this.players.add(player);
 	}
 
-	public void removePlayer(Player player) {
-		this.players.remove(player);
+	public boolean removePlayer(Player player) {
+		if (this.players.contains(player)) {
+			this.players.remove(player);
+			return true;
+		}
+
+		return false;
 	}
 
 	public SudokuGameStatus getStatus() {
