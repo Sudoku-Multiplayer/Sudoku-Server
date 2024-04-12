@@ -1,5 +1,6 @@
 package io.github.himanshusajwan911.sudokuserver.dto;
 
+import io.github.himanshusajwan911.sudokuserver.model.Player;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame.SudokuGameStatus;
 import io.github.himanshusajwan911.sudokuserver.service.SudokuService.Level;
 
@@ -7,7 +8,7 @@ public class SudokuGameDTO {
 
 	private String gameName;
 
-	private String hostName;
+	private Player hostPlayer;
 
 	private int boardSize;
 
@@ -35,12 +36,12 @@ public class SudokuGameDTO {
 		this.gameName = gameName;
 	}
 
-	public String getHostName() {
-		return hostName;
+	public Player getHostPlayer() {
+		return hostPlayer;
 	}
 
-	public void setHostName(String hostName) {
-		this.hostName = hostName;
+	public void setHostPlayer(Player hostPlayer) {
+		this.hostPlayer = hostPlayer;
 	}
 
 	public int[][] getInitialBoard() {
