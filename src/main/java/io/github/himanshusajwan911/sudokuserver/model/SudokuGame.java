@@ -13,7 +13,7 @@ public class SudokuGame {
 
 	private String gameName;
 
-	private String hostName;
+	private Player hostPlayer;
 
 	private int[][] initialBoard;
 
@@ -67,12 +67,12 @@ public class SudokuGame {
 		this.gameName = gameName;
 	}
 
-	public String getHostName() {
-		return hostName;
+	public Player getHostPlayer() {
+		return hostPlayer;
 	}
 
-	public void setHostName(String hostName) {
-		this.hostName = hostName;
+	public void setHostPlayer(Player hostPlayer) {
+		this.hostPlayer = hostPlayer;
 	}
 
 	public int[][] getInitialBoard() {
