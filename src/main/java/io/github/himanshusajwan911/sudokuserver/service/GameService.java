@@ -15,7 +15,6 @@ import io.github.himanshusajwan911.sudokuserver.exception.GameAlreadyExistsExcep
 import io.github.himanshusajwan911.sudokuserver.exception.NoSuchGameExistsException;
 import io.github.himanshusajwan911.sudokuserver.model.BoardUpdate;
 import io.github.himanshusajwan911.sudokuserver.model.CreateGameRequest;
-import io.github.himanshusajwan911.sudokuserver.model.GameChatMessage;
 import io.github.himanshusajwan911.sudokuserver.model.JoinGameResponse;
 import io.github.himanshusajwan911.sudokuserver.model.Player;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame;
@@ -46,7 +45,7 @@ public class GameService {
 		SudokuGame game = sudokuService.generateSudokuGame(boardSize, level, playerLimit);
 		game.setStatus(SudokuGameStatus.NEW);
 		game.setGameId(gameId);
-		game.setHostName(createGameRequest.getPlayer().getName());
+		game.setHostPlayer(createGameRequest.getPlayer());
 		game.setGameName(createGameRequest.getGameName());
 
 		gamesMap.put(gameId, game);
@@ -129,7 +128,7 @@ public class GameService {
 
 		for (SudokuGame game : this.gamesMap.values()) {
 			SudokuGameDTO gameDTO = new SudokuGameDTO();
-			gameDTO.setHostName(game.getHostName());
+			gameDTO.setHostPlayer(game.getHostPlayer());
 			gameDTO.setGameName(game.getGameName());
 			gameDTO.setInitialBoard(game.getInitialBoard());
 			gameDTO.setCurrentBoard(game.getCurrentBoard());
@@ -160,12 +159,8 @@ public class GameService {
 
 		game.updateCurrentBoard(boardUpdate.value, boardUpdate.row, boardUpdate.column);
 
-		// List<BoardUpdate> boardUpdates = boardUpdatesMap.getOrDefault(gameId, new
-		// ArrayList<BoardUpdate>());
 		List<BoardUpdate> boardUpdates = boardUpdatesMap.get(gameId);
 		boardUpdates.add(boardUpdate);
-
-		// boardUpdatesMap.putIfAbsent(gameId, boardUpdates);
 	}
 
 	public List<BoardUpdate> getBoardUpdates(String gameId) {
