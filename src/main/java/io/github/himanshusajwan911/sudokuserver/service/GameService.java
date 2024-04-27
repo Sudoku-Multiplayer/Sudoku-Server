@@ -110,10 +110,11 @@ public class GameService {
 		int boardSize = createGameRequest.getBoardSize();
 		int playerLimit = createGameRequest.getPlayerLimit();
 		Level level = createGameRequest.getLevel();
+		String gameName = createGameRequest.getGameName();
 
 		byte[] playerNameBytes = player.getName().getBytes();
 		byte[] playerIdBytes = ("" + player.getId()).getBytes();
-		byte[] gameBytes = (level.toString() + boardSize + playerLimit).getBytes();
+		byte[] gameBytes = (gameName + level.toString() + boardSize + playerLimit).getBytes();
 
 		byte[] playerBytes = Arrays.copyOf(playerNameBytes, playerNameBytes.length + playerIdBytes.length);
 		System.arraycopy(playerIdBytes, 0, playerBytes, playerNameBytes.length, playerIdBytes.length);
