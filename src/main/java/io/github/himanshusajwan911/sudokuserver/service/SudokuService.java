@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import io.github.himanshusajwan911.sudokuserver.model.GameBoard;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame;
 import io.github.himanshusajwan911.sudokuserver.util.Util;
 
@@ -25,16 +26,18 @@ public class SudokuService {
 			return cellRemovePercent;
 		}
 	}
-	
-	public SudokuGame generateSudokuGame(int boardSize, Level level, int playerLimit) {
-		
-		int[][] board = generateSudokuBoard(boardSize, level);
-		SudokuGame sudokuGame = new SudokuGame(board, level, playerLimit);
-		
+
+	public SudokuGame generateSudokuGame(int boardSize, Level level, int playerLimit, int timeLimitSeconds) {
+
+		GameBoard gameBoard = generateSudokuBoard(boardSize, level);
+		int[][] currentBoard = Util.clone2DArray(gameBoard.getBoard());
+		SudokuGame sudokuGame = new SudokuGame(gameBoard.getBoard(), currentBoard, gameBoard.getSolution(), level,
+				playerLimit, timeLimitSeconds);
+
 		return sudokuGame;
 	}
 
-	public int[][] generateSudokuBoard(int boardSize, Level level) {
+	public GameBoard generateSudokuBoard(int boardSize, Level level) {
 
 		int cellCount = boardSize * boardSize;
 
@@ -43,13 +46,17 @@ public class SudokuService {
 		return generateSudokuBoard(boardSize, cellToRemove);
 	}
 
-	public int[][] generateSudokuBoard(int boardSize, int cellRemoveCount) {
+	public GameBoard generateSudokuBoard(int boardSize, int cellRemoveCount) {
 
-		int[][] board = generateSolvedSudokuBoard(boardSize);
+		int[][] solvedBoard = generateSolvedSudokuBoard(boardSize);
 
-		removeRandomCells(board, cellRemoveCount);
+		int[][] removedBoard = Util.clone2DArray(solvedBoard);
 
-		return board;
+		removeRandomCells(removedBoard, cellRemoveCount);
+
+		GameBoard gameBoard = new GameBoard(removedBoard, solvedBoard);
+
+		return gameBoard;
 	}
 
 	protected int[][] generateSolvedSudokuBoard(int boardSize) {
