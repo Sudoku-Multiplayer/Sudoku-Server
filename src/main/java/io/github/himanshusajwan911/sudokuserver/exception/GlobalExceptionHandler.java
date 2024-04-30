@@ -14,4 +14,9 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>("Malformed request body: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 
+	@ExceptionHandler(MissingParameterException.class)
+	public ResponseEntity<String> handleMissingParameterException(MissingParameterException ex) {
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+
 }
