@@ -8,7 +8,7 @@ import io.github.himanshusajwan911.sudokuserver.service.SudokuService.Level;
 public class SudokuGame {
 
 	public enum SudokuGameStatus {
-		NEW, RUNNING, FINISHED, FULL, PLAYER_ADDED, PLAYER_ALREADY_JOINED, NO_SUCH_GAME_EXISTS;
+		NEW, RUNNING, FINISHED, FULL, PLAYER_ADDED, PLAYER_ALREADY_JOINED, NO_SUCH_GAME_EXISTS, PAUSED;
 	}
 
 	private String gameName;
@@ -31,31 +31,42 @@ public class SudokuGame {
 
 	private String gameId;
 
+	private int timeLimit;
+
+	private int remainingTime;
+
 	public SudokuGame(int[][] initialBoard, int[][] currentBoard, int[][] solution, int playerLimit) {
 		this.initialBoard = initialBoard;
 		this.currentBoard = currentBoard;
 		this.solution = solution;
 		this.playerLimit = playerLimit;
+		this.timeLimit = 5 * 60;
+		this.remainingTime = this.timeLimit;
 		this.level = Level.EASY;
 		this.players = new ArrayList<Player>();
 	}
 
-	public SudokuGame(int[][] initialBoard, int[][] currentBoard, int[][] solution, Level level, int playerLimit) {
+	public SudokuGame(int[][] initialBoard, int[][] currentBoard, int[][] solution, Level level, int playerLimit,
+			int timeLimit) {
 		this.initialBoard = initialBoard;
 		this.currentBoard = currentBoard;
 		this.solution = solution;
 		this.level = level;
 		this.playerLimit = playerLimit;
+		this.timeLimit = timeLimit;
+		this.remainingTime = timeLimit;
 		this.players = new ArrayList<Player>();
 	}
 
 	public SudokuGame(int[][] initialBoard, int[][] currentBoard, int[][] solution, Level level, int playerLimit,
-			List<Player> players) {
+			int timeLimit, List<Player> players) {
 		this.initialBoard = initialBoard;
 		this.currentBoard = currentBoard;
 		this.solution = solution;
 		this.level = level;
 		this.playerLimit = playerLimit;
+		this.timeLimit = timeLimit;
+		this.remainingTime = timeLimit;
 		this.players = players;
 	}
 
@@ -100,12 +111,7 @@ public class SudokuGame {
 	}
 
 	public boolean removePlayer(Player player) {
-		if (this.players.contains(player)) {
-			this.players.remove(player);
-			return true;
-		}
-
-		return false;
+		return this.players.remove(player);
 	}
 
 	public SudokuGameStatus getStatus() {
@@ -138,6 +144,26 @@ public class SudokuGame {
 
 	public void setGameId(String gameId) {
 		this.gameId = gameId;
+	}
+
+	public int getTimeLimit() {
+		return timeLimit;
+	}
+
+	public void setTimeLimit(int timeLimit) {
+		this.timeLimit = timeLimit;
+	}
+
+	public int getRemainingTime() {
+		return remainingTime;
+	}
+
+	public void increaseRemainingTime(int increaseBy) {
+		this.remainingTime += increaseBy;
+	}
+
+	public void decreaseRemainingTime(int decreaseBy) {
+		this.remainingTime -= decreaseBy;
 	}
 
 	public void updateCurrentBoard(int value, int row, int column) {
