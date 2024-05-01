@@ -45,6 +45,7 @@ public class GameSession {
 		} else {
 			if (game.getStatus() == SudokuGameStatus.NEW) {
 				game.setStatus(SudokuGameStatus.RUNNING);
+				notificationService.notifyForGameSessionStatusUpdate(game.getGameId(), game.getStatus());
 				gameThread.start();
 			}
 		}
@@ -59,7 +60,7 @@ public class GameSession {
 			notificationService.notifyForGameSessionMessageUpdate(game.getGameId(),
 					"Cannot pause, Game is not started yet.");
 		} else if (game.getStatus() == SudokuGameStatus.FINISHED) {
-			notificationService.notifyForGameSessionMessageUpdate(game.getGameId(), "Game is Finished, cannot pause.");
+			notificationService.notifyForGameSessionMessageUpdate(game.getGameId(), "Cannot pause, Game is Finished.");
 		} else {
 			gameSessionRunner.pauseGame();
 		}
