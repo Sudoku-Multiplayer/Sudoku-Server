@@ -5,7 +5,7 @@ import io.github.himanshusajwan911.sudokuserver.service.SudokuService.Level;
 public class CreateGameRequest {
 
 	private String gameName;
-	
+
 	private Player player;
 
 	private int boardSize;
@@ -13,6 +13,8 @@ public class CreateGameRequest {
 	private Level level;
 
 	private int playerLimit;
+
+	private int timeLimit;
 
 	public String getGameName() {
 		return gameName;
@@ -52,6 +54,20 @@ public class CreateGameRequest {
 
 	public void setPlayerLimit(int playerLimit) {
 		this.playerLimit = playerLimit;
+	}
+
+	public int getTimeLimit() {
+		return timeLimit;
+	}
+
+	public void setTimeLimit(int timeLimit) {
+		this.timeLimit = timeLimit;
+	}
+
+	@Override
+	public String toString() {
+		return "CreateGameRequest [gameName=" + gameName + ", player=" + player + ", boardSize=" + boardSize
+				+ ", level=" + level + ", playerLimit=" + playerLimit + ", timeLimit=" + timeLimit + "]";
 	}
 
 }
