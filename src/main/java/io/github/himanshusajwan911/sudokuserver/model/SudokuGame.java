@@ -1,6 +1,5 @@
 package io.github.himanshusajwan911.sudokuserver.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.github.himanshusajwan911.sudokuserver.service.SudokuService.Level;
@@ -23,8 +22,6 @@ public class SudokuGame {
 
 	private Level level;
 
-	private List<Player> players;
-
 	private int playerLimit;
 
 	private SudokuGameStatus status;
@@ -43,7 +40,6 @@ public class SudokuGame {
 		this.timeLimit = 5 * 60;
 		this.remainingTime = this.timeLimit;
 		this.level = Level.EASY;
-		this.players = new ArrayList<Player>();
 	}
 
 	public SudokuGame(int[][] initialBoard, int[][] currentBoard, int[][] solution, Level level, int playerLimit,
@@ -55,7 +51,6 @@ public class SudokuGame {
 		this.playerLimit = playerLimit;
 		this.timeLimit = timeLimit;
 		this.remainingTime = timeLimit;
-		this.players = new ArrayList<Player>();
 	}
 
 	public SudokuGame(int[][] initialBoard, int[][] currentBoard, int[][] solution, Level level, int playerLimit,
@@ -67,7 +62,6 @@ public class SudokuGame {
 		this.playerLimit = playerLimit;
 		this.timeLimit = timeLimit;
 		this.remainingTime = timeLimit;
-		this.players = players;
 	}
 
 	public String getGameName() {
@@ -106,14 +100,6 @@ public class SudokuGame {
 		return level;
 	}
 
-	public void addPlayer(Player player) {
-		this.players.add(player);
-	}
-
-	public boolean removePlayer(Player player) {
-		return this.players.remove(player);
-	}
-
 	public SudokuGameStatus getStatus() {
 		return status;
 	}
@@ -128,14 +114,6 @@ public class SudokuGame {
 
 	public void setPlayerLimit(int playerLimit) {
 		this.playerLimit = playerLimit;
-	}
-
-	public int getPlayerCount() {
-		return players.size();
-	}
-
-	public List<Player> getPlayers() {
-		return players;
 	}
 
 	public String getGameId() {
