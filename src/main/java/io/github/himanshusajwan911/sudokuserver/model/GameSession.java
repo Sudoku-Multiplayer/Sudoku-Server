@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class GameSession {
 
+	private String sessionId;
+
 	private SudokuGame game;
 
 	private List<GameChatMessage> gameChatMessages;
@@ -19,6 +21,10 @@ public class GameSession {
 		this.gameChatMessages = new ArrayList<>();
 		this.boardUpdates = new ArrayList<>();
 		this.playerSessionMap = new LinkedHashMap<>();
+	}
+
+	public String getSessionId() {
+		return sessionId;
 	}
 
 	public SudokuGame getGame() {
