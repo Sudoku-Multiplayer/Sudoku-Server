@@ -9,6 +9,8 @@ public class GameSession {
 
 	private String sessionId;
 
+	private GameSessionStatus gameSessionStatus;
+
 	private SudokuGame game;
 
 	private int timeLimit;
@@ -34,6 +36,14 @@ public class GameSession {
 
 	public String getSessionId() {
 		return sessionId;
+	}
+
+	public synchronized GameSessionStatus getGameSessionStatus() {
+		return gameSessionStatus;
+	}
+
+	public void setGameSessionStatus(GameSessionStatus gameSessionStatus) {
+		this.gameSessionStatus = gameSessionStatus;
 	}
 
 	public SudokuGame getGame() {
