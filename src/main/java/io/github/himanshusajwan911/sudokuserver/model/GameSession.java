@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class GameSession {
 
+	private final Object boardUpdateLock = new Object();
+
 	private String sessionId;
 
 	private GameSessionStatus gameSessionStatus;
@@ -17,6 +19,8 @@ public class GameSession {
 	private int remainingTime;
 
 	private int playerLimit;
+
+	private int[][] gameBoard;
 
 	private List<GameChatMessage> gameChatMessages;
 	private List<BoardUpdate> boardUpdates;
@@ -58,16 +62,26 @@ public class GameSession {
 		return remainingTime;
 	}
 
-	public int getPlayerLimit() {
-		return playerLimit;
-	}
-
 	public synchronized void increaseRemainingTime(int increaseBy) {
 		this.remainingTime += increaseBy;
 	}
 
 	public synchronized void decreaseRemainingTime(int decreaseBy) {
 		this.remainingTime -= decreaseBy;
+	}
+
+	public int getPlayerLimit() {
+		return playerLimit;
+	}
+
+	public synchronized int[][] getGameBoard() {
+		return gameBoard;
+	}
+
+	public void updateBoard(BoardUpdate boardUpdate) {
+		synchronized (boardUpdateLock) {
+			this.gameBoard[boardUpdate.row][boardUpdate.column] = boardUpdate.value;
+		}
 	}
 
 	public void addPlayer(Player player) {
