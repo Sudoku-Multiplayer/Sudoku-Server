@@ -24,6 +24,8 @@ public class GameSession {
 
 	private int[][] gameBoard;
 
+	private VoteSession voteSession;
+
 	private List<GameChatMessage> gameChatMessages;
 	private List<BoardUpdate> boardUpdates;
 
@@ -37,6 +39,7 @@ public class GameSession {
 		this.sessionId = game.getGameId();
 		this.gameSessionStatus = GameSessionStatus.NEW;
 		this.gameBoard = Util.clone2DArray(game.getInitialBoard());
+		this.voteSession = new VoteSession();
 		this.gameChatMessages = new ArrayList<>();
 		this.boardUpdates = new ArrayList<>();
 		this.playerSessionMap = new LinkedHashMap<>();
@@ -80,6 +83,10 @@ public class GameSession {
 
 	public synchronized int[][] getGameBoard() {
 		return gameBoard;
+	}
+
+	public VoteSession getVoteSession() {
+		return voteSession;
 	}
 
 	public void updateBoard(BoardUpdate boardUpdate) {
