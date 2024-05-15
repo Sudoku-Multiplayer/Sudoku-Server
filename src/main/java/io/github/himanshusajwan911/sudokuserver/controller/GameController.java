@@ -26,6 +26,7 @@ import io.github.himanshusajwan911.sudokuserver.model.JoinGameResponse;
 import io.github.himanshusajwan911.sudokuserver.model.Player;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame.SudokuGameStatus;
+import io.github.himanshusajwan911.sudokuserver.model.VoteRecord;
 import io.github.himanshusajwan911.sudokuserver.repository.GameRepository;
 import io.github.himanshusajwan911.sudokuserver.service.GameService;
 import io.github.himanshusajwan911.sudokuserver.service.GameSessionService;
@@ -154,6 +155,22 @@ public class GameController {
 			@RequestParam(name = "gameId", required = true) String gameId) {
 
 		return new ResponseEntity<>(gameSessionService.getJoinedPlayers(gameId), HttpStatus.OK);
+	}
+
+	@CrossOrigin(origins = "*")
+	@PatchMapping("/game-submit-voting/initiate")
+	public ResponseEntity<Boolean> initiateGameSubmitVoting(@RequestParam("gameId") String gameId,
+			@RequestBody Player player) {
+		gameSessionService.initiateGameSubmitVoting(gameId, player);
+
+		return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+	}
+
+	@MessageMapping("/{gameId}/cast-vote")
+	public void handleGameSubmitVoteCasted(@DestinationVariable String gameId, @Payload VoteRecord voteRecord)
+			throws Exception {
+
+		gameSessionService.castGameSubmitVote(gameId, voteRecord);
 	}
 
 }
