@@ -95,10 +95,23 @@ public class GameSession {
 		}
 	}
 
-	public void addPlayer(Player player) {
+	public void addBoardUpdate(BoardUpdate boardUpdate) {
+		synchronized (boardUpdateLock) {
+			boardUpdates.add(boardUpdate);
+		}
+	}
+
+	public List<BoardUpdate> getBoardUpdates() {
+		synchronized (boardUpdateLock) {
+			return boardUpdates;
+		}
+	}
+
+	public synchronized void addPlayer(Player player) {
 		PlayerSession playerSession = new PlayerSession();
 		playerSession.setPlayer(player);
 		playerSession.setVoteStatus(VoteStatus.WAITING);
+		voteSession.addVoter(player);
 
 		playerSessionMap.put(player, playerSession);
 	}
@@ -106,24 +119,17 @@ public class GameSession {
 	public boolean removePlayer(Player player) {
 		PlayerSession playerSession = playerSessionMap.remove(player);
 		Player removedPlayer = playerSession.getPlayer();
+		voteSession.removeVoter(player);
 
 		return player.equals(removedPlayer);
 	}
 
-	public List<Player> getJoinedPlayers() {
+	public synchronized List<Player> getJoinedPlayers() {
 		return new ArrayList<Player>(playerSessionMap.keySet());
 	}
 
-	public int getPlayerCount() {
+	public synchronized int getPlayerCount() {
 		return playerSessionMap.size();
-	}
-
-	public void addBoardUpdate(BoardUpdate boardUpdate) {
-		boardUpdates.add(boardUpdate);
-	}
-
-	public List<BoardUpdate> getBoardUpdates() {
-		return boardUpdates;
 	}
 
 	public void addGameChatMessage(GameChatMessage gameChatMessage) {
