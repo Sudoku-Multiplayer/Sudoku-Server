@@ -21,6 +21,7 @@ import io.github.himanshusajwan911.sudokuserver.dto.SudokuGameDTO;
 import io.github.himanshusajwan911.sudokuserver.model.BoardUpdate;
 import io.github.himanshusajwan911.sudokuserver.model.CreateGameRequest;
 import io.github.himanshusajwan911.sudokuserver.model.CreateGameResponse;
+import io.github.himanshusajwan911.sudokuserver.model.GameSession;
 import io.github.himanshusajwan911.sudokuserver.model.JoinGameResponse;
 import io.github.himanshusajwan911.sudokuserver.model.Player;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame;
@@ -60,7 +61,10 @@ public class GameController {
 		createGameResponse.setGameId(gameId);
 
 		SudokuGame game = gameRepository.getGame(gameId);
-		gameSessionService.createGameSession(gameId, game);
+		GameSession gameSession = gameSessionService.createGameSession(gameId, game, createGameRequest.getTimeLimit(),
+				createGameRequest.getPlayerLimit());
+
+		gameSessionService.createGameSessionManager(gameSession);
 
 		return new ResponseEntity<>(createGameResponse, HttpStatus.CREATED);
 	}
@@ -76,9 +80,10 @@ public class GameController {
 	public ResponseEntity<JoinGameResponse> joinGame(@RequestBody Player player,
 			@RequestParam("gameId") String gameId) {
 
-		JoinGameResponse joinGameResponse = gameService.joinGame(player, gameId);
-		if (joinGameResponse.getGameStatus() == SudokuGameStatus.PLAYER_ADDED
-				|| joinGameResponse.getGameStatus() == SudokuGameStatus.PLAYER_ALREADY_JOINED) {
+		JoinGameResponse joinGameResponse = gameSessionService.joinGame(player, gameId);
+
+		if (joinGameResponse.getJoinStatus() == SudokuGameStatus.PLAYER_ADDED
+				|| joinGameResponse.getJoinStatus() == SudokuGameStatus.PLAYER_ALREADY_JOINED) {
 			notificationService.notifyForGameSessionPlayerJoined(gameId, player);
 		}
 
@@ -88,7 +93,7 @@ public class GameController {
 	@CrossOrigin(origins = "*")
 	@PostMapping("/leave-game")
 	public boolean leaveGame(@RequestParam("gameId") String gameId, @RequestBody Player player) {
-		boolean playerLeft = gameService.leaveGame(player, gameId);
+		boolean playerLeft = gameSessionService.leaveGame(player, gameId);
 
 		if (playerLeft) {
 			notificationService.notifyForGameSessionPlayerLeft(gameId, player);
@@ -130,8 +135,8 @@ public class GameController {
 	@MessageMapping("/{gameId}/update-board")
 	public void handleBoardUpdate(@DestinationVariable String gameId, @Payload BoardUpdate boardUpdate)
 			throws Exception {
-		System.out.println("gameId for updates: " + gameId);
-		gameService.updateBoard(gameId, boardUpdate);
+
+		gameSessionService.updateBoard(gameId, boardUpdate);
 	}
 
 	@CrossOrigin("*")
@@ -148,7 +153,7 @@ public class GameController {
 	public ResponseEntity<List<Player>> getJoinedPlayers(
 			@RequestParam(name = "gameId", required = true) String gameId) {
 
-		return new ResponseEntity<>(gameService.getJoinedPlayers(gameId), HttpStatus.OK);
+		return new ResponseEntity<>(gameSessionService.getJoinedPlayers(gameId), HttpStatus.OK);
 	}
 
 }
