@@ -20,8 +20,6 @@ public class GameSession {
 
 	private NotificationService notificationService;
 
-	private int gameSubmitVoteCount;
-
 	private List<GameChatMessage> gameChatMessages;
 	private List<BoardUpdate> boardUpdates;
 
@@ -130,55 +128,6 @@ public class GameSession {
 
 	public List<GameChatMessage> getGameChatMessages() {
 		return gameChatMessages;
-	}
-
-	public void initiateGameSubmitVoting(Player player) {
-		if (game.getStatus() == SudokuGameStatus.NEW) {
-			throw new GameNotStartedException("cannot initiate Game Submit Voting, game is not Started yet.");
-		}
-
-		if (game.getStatus() == SudokuGameStatus.FINISHED) {
-			throw new GameFinishedException("cannot initiate Game Submit Voting, game is already Finsished.");
-		}
-
-		for (PlayerSession playerSession : playerSessionMap.values()) {
-			playerSession.resetVoteStatus();
-		}
-
-		gameSubmitVoteCount = 0;
-		notificationService.notifyForGameSessionSubmissionVoteInitiated(game.getGameId(), player);
-	}
-
-	public void castGameSubmitVote(String gameId, VoteRecord voteRecord) {
-
-		PlayerSession playerSession = playerSessionMap.get(voteRecord.getVoter());
-		if (playerSession.getVoteStatus() == VoteStatus.WAITING) {
-			playerSession.setVoteStatus(voteRecord.getVoteStatus());
-			notificationService.notifyForGameSessionSubmissionVoteCasted(gameId, voteRecord);
-
-			if (voteRecord.getVoteStatus() == VoteStatus.ACCEPTED) {
-				++gameSubmitVoteCount;
-
-				if (game.getStatus() != SudokuGameStatus.FINISHED) {
-					if (isGameOverViaVoting()) {
-						stopGame();
-						notificationService.notifyForGameSessionMessageUpdate(game.getGameId(),
-								"Game Over via voting.");
-					}
-				}
-			}
-		}
-	}
-
-	public boolean isGameOverViaVoting() {
-
-		int gameOverThreshold = (int) ((1.0 / 2.0) * playerSessionMap.size());
-
-		if (gameSubmitVoteCount > gameOverThreshold) {
-			return true;
-		}
-
-		return false;
 	}
 
 }
