@@ -11,13 +11,22 @@ public class GameSession {
 
 	private SudokuGame game;
 
+	private int timeLimit;
+	private int remainingTime;
+
+	private int playerLimit;
+
 	private List<GameChatMessage> gameChatMessages;
 	private List<BoardUpdate> boardUpdates;
 
 	private Map<Player, PlayerSession> playerSessionMap;
 
-	public GameSession(SudokuGame game) {
+	public GameSession(SudokuGame game, int timeLimit, int playerLimit) {
 		this.game = game;
+		this.timeLimit = timeLimit;
+		this.remainingTime = timeLimit;
+		this.playerLimit = playerLimit;
+		this.sessionId = game.getGameId();
 		this.gameChatMessages = new ArrayList<>();
 		this.boardUpdates = new ArrayList<>();
 		this.playerSessionMap = new LinkedHashMap<>();
@@ -29,6 +38,26 @@ public class GameSession {
 
 	public SudokuGame getGame() {
 		return game;
+	}
+
+	public int getTimeLimit() {
+		return timeLimit;
+	}
+
+	public synchronized int getRemainingTime() {
+		return remainingTime;
+	}
+
+	public int getPlayerLimit() {
+		return playerLimit;
+	}
+
+	public synchronized void increaseRemainingTime(int increaseBy) {
+		this.remainingTime += increaseBy;
+	}
+
+	public synchronized void decreaseRemainingTime(int decreaseBy) {
+		this.remainingTime -= decreaseBy;
 	}
 
 	public void addPlayer(Player player) {
