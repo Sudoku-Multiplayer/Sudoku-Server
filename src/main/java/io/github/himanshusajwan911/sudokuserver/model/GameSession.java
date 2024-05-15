@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.github.himanshusajwan911.sudokuserver.util.Util;
+
 public class GameSession {
 
 	private final Object boardUpdateLock = new Object();
@@ -33,6 +35,8 @@ public class GameSession {
 		this.remainingTime = timeLimit;
 		this.playerLimit = playerLimit;
 		this.sessionId = game.getGameId();
+		this.gameSessionStatus = GameSessionStatus.NEW;
+		this.gameBoard = Util.clone2DArray(game.getInitialBoard());
 		this.gameChatMessages = new ArrayList<>();
 		this.boardUpdates = new ArrayList<>();
 		this.playerSessionMap = new LinkedHashMap<>();
