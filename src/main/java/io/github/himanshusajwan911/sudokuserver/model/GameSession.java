@@ -10,6 +10,7 @@ import io.github.himanshusajwan911.sudokuserver.util.Util;
 public class GameSession {
 
 	private final Object boardUpdateLock = new Object();
+	private final Object gameChatLock = new Object();
 
 	private String sessionId;
 
@@ -133,11 +134,15 @@ public class GameSession {
 	}
 
 	public void addGameChatMessage(GameChatMessage gameChatMessage) {
-		gameChatMessages.add(gameChatMessage);
+		synchronized (gameChatLock) {
+			gameChatMessages.add(gameChatMessage);
+		}
 	}
 
 	public List<GameChatMessage> getGameChatMessages() {
-		return gameChatMessages;
+		synchronized (gameChatLock) {
+			return gameChatMessages;
+		}
 	}
 
 }
