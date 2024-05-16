@@ -14,6 +14,7 @@ import io.github.himanshusajwan911.sudokuserver.model.JoinGameResponse;
 import io.github.himanshusajwan911.sudokuserver.model.JoinStatus;
 import io.github.himanshusajwan911.sudokuserver.model.Player;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame;
+import io.github.himanshusajwan911.sudokuserver.model.VoteRecord;
 import io.github.himanshusajwan911.sudokuserver.repository.GameSessionRepository;
 
 @Service
@@ -168,6 +169,16 @@ public class GameSessionService {
 		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
 
 		return gameSession.getGameChatMessages();
+	}
+
+	public void initiateGameSubmitVoting(String gameSessionId, Player player) {
+		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
+		gameSessionManager.initiateGameSubmitVoting(player);
+	}
+
+	public void castGameSubmitVote(String gameSessionId, VoteRecord voteRecord) {
+		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
+		gameSessionManager.castGameSubmitVote(voteRecord);
 	}
 
 }
