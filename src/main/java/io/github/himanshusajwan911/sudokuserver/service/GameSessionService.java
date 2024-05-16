@@ -29,6 +29,13 @@ public class GameSessionService {
 		return gameSession;
 	}
 
+	public GameSessionManager createGameSessionManager(GameSession gameSession) {
+		GameSessionManager gameSessionManager = new GameSessionManager(gameSession, notificationService);
+		gameSessionRepository.addGameSessionManager(gameSession.getSessionId(), gameSessionManager);
+
+		return gameSessionManager;
+	}
+
 	public void startGame(String gameId) {
 		GameSession gameSession = gameSessionRepository.getGameSession(gameId);
 		gameSession.startGame();
