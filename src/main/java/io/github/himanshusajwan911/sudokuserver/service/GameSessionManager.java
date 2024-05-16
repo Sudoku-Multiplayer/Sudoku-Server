@@ -118,6 +118,7 @@ public class GameSessionManager {
 
 			if (existingVoteRecord.getVoteStatus() == VoteStatus.WAITING) {
 				gameSession.getVoteSession().castVote(voteRecord);
+				notificationService.notifyForGameSessionSubmissionVoteCasted(gameSession.getSessionId(), voteRecord);
 			}
 
 			if (isGameOverViaVoting(voteSession)) {
