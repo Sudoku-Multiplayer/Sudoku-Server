@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.himanshusajwan911.sudokuserver.model.Player;
 import io.github.himanshusajwan911.sudokuserver.model.WebSocketSession;
 import io.github.himanshusajwan911.sudokuserver.service.GameService;
+import io.github.himanshusajwan911.sudokuserver.service.GameSessionService;
 import io.github.himanshusajwan911.sudokuserver.service.NotificationService;
 import io.github.himanshusajwan911.sudokuserver.service.WebSocketSessionService;
 
@@ -24,12 +25,15 @@ public class WebSocketEventListener {
 
 	private GameService gameService;
 
+	private GameSessionService gameSessionService;
+
 	private NotificationService notificationService;
 
 	public WebSocketEventListener(WebSocketSessionService webSocketSessionService, GameService gameService,
-			NotificationService notificationService) {
+			GameSessionService gameSessionService, NotificationService notificationService) {
 		this.webSocketSessionService = webSocketSessionService;
 		this.gameService = gameService;
+		this.gameSessionService = gameSessionService;
 		this.notificationService = notificationService;
 	}
 
@@ -61,7 +65,7 @@ public class WebSocketEventListener {
 		Player player = webSocketSession.getPlayer();
 		String gameSessionId = webSocketSession.getSubscribedGameSessionId();
 
-		boolean playerLeft = gameService.leaveGame(player, gameSessionId);
+		boolean playerLeft = gameSessionService.leaveGame(player, gameSessionId);
 
 		if (playerLeft) {
 			notificationService.notifyForGameSessionPlayerLeft(gameSessionId, player);
