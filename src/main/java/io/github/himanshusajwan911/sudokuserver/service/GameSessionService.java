@@ -4,11 +4,15 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import io.github.himanshusajwan911.sudokuserver.dto.GameSessionDTO;
 import io.github.himanshusajwan911.sudokuserver.exception.NoSuchGameExistsException;
 import io.github.himanshusajwan911.sudokuserver.model.BoardUpdate;
 import io.github.himanshusajwan911.sudokuserver.model.GameChatMessage;
 import io.github.himanshusajwan911.sudokuserver.model.GameSession;
 import io.github.himanshusajwan911.sudokuserver.model.GameSessionStatus;
+import io.github.himanshusajwan911.sudokuserver.model.JoinGameResponse;
+import io.github.himanshusajwan911.sudokuserver.model.JoinStatus;
+import io.github.himanshusajwan911.sudokuserver.model.Player;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame;
 import io.github.himanshusajwan911.sudokuserver.repository.GameSessionRepository;
 
@@ -56,6 +60,62 @@ public class GameSessionService {
 	public void resumeGame(String gameSessionId) {
 		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
 		gameSessionManager.resumeGame();
+	}
+
+	public JoinGameResponse joinGame(Player player, String gameSessionId) {
+		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
+
+		if (gameSession == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
+		JoinGameResponse joinGameResponse = new JoinGameResponse();
+
+		if (gameSession.getPlayerCount() >= gameSession.getGame().getPlayerLimit()) {
+			joinGameResponse.setJoinStatus(JoinStatus.GAME_FULL);
+			joinGameResponse.setStatusMessage("Game is full, cannot join.");
+		}
+
+		else {
+			joinGameResponse.setJoinStatus(JoinStatus.PLAYER_ADDED);
+			joinGameResponse.setStatusMessage("Game joined successfully.");
+
+			gameSession.addPlayer(player);
+
+			GameSessionDTO gameSessionDTO = new GameSessionDTO();
+			gameSessionDTO.setSessionId(gameSession.getSessionId());
+			gameSessionDTO.setGame(gameSession.getGame());
+			gameSessionDTO.setTimeLimit(gameSession.getTimeLimit());
+			gameSessionDTO.setRemainingTime(gameSession.getRemainingTime());
+			gameSessionDTO.setGameSessionStatus(gameSession.getGameSessionStatus());
+			gameSessionDTO.setGameBoard(gameSession.getGameBoard());
+			gameSessionDTO.setGameChatMessages(gameSession.getGameChatMessages());
+			gameSessionDTO.setBoardUpdates(gameSession.getBoardUpdates());
+			gameSessionDTO.setPlayers(gameSession.getJoinedPlayers());
+
+			joinGameResponse.setGameSession(gameSessionDTO);
+		}
+
+		return joinGameResponse;
+	}
+
+	public boolean leaveGame(Player player, String gameSessionId) {
+		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
+		if (gameSession != null) {
+			return gameSession.removePlayer(player);
+		}
+
+		return false;
+	}
+
+	public List<Player> getJoinedPlayers(String gameSessionId) {
+
+		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
+		if (gameSession == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
+		return gameSession.getJoinedPlayers();
 	}
 
 	public void updateBoard(String gameSessionId, BoardUpdate boardUpdate) {
