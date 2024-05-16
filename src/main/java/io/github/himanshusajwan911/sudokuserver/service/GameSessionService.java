@@ -22,8 +22,8 @@ public class GameSessionService {
 		this.notificationService = notificationService;
 	}
 
-	public GameSession createGameSession(String gameId, SudokuGame game) {
-		GameSession gameSession = new GameSession(game, notificationService);
+	public GameSession createGameSession(String gameId, SudokuGame game, int timeLimit, int playerLimit) {
+		GameSession gameSession = new GameSession(game, timeLimit, playerLimit);
 		gameSessionRepository.addGameSession(gameId, gameSession);
 
 		return gameSession;
