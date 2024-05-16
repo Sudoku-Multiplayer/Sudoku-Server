@@ -37,23 +37,23 @@ public class GameSessionService {
 	}
 
 	public void startGame(String gameId) {
-		GameSession gameSession = gameSessionRepository.getGameSession(gameId);
-		gameSession.startGame();
+		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameId);
+		gameSessionManager.startGame();
 	}
 
 	public void stopGame(String gameId) {
-		GameSession gameSession = gameSessionRepository.getGameSession(gameId);
-		gameSession.stopGame();
+		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameId);
+		gameSessionManager.stopGame();
 	}
 
 	public void pauseGame(String gameId) {
-		GameSession gameSession = gameSessionRepository.getGameSession(gameId);
-		gameSession.pauseGame();
+		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameId);
+		gameSessionManager.pauseGame();
 	}
 
 	public void resumeGame(String gameId) {
-		GameSession gameSession = gameSessionRepository.getGameSession(gameId);
-		gameSession.resumeGame();
+		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameId);
+		gameSessionManager.resumeGame();
 	}
 
 	public void addBoardUpdate(String gameId, BoardUpdate boardUpdate) {
