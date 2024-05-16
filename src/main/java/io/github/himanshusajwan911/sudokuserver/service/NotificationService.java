@@ -5,8 +5,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import io.github.himanshusajwan911.sudokuserver.model.BoardUpdate;
+import io.github.himanshusajwan911.sudokuserver.model.GameSessionStatus;
 import io.github.himanshusajwan911.sudokuserver.model.Player;
-import io.github.himanshusajwan911.sudokuserver.model.SudokuGame.SudokuGameStatus;
+import io.github.himanshusajwan911.sudokuserver.model.VoteRecord;
 
 @Service
 public class NotificationService {
@@ -31,9 +32,9 @@ public class NotificationService {
 		simpMessagingTemplate.convertAndSend(destination, updatedTime);
 	}
 
-	public void notifyForGameSessionStatusUpdate(String gameId, SudokuGameStatus sudokuGameStatus) {
+	public void notifyForGameSessionStatusUpdate(String gameId, GameSessionStatus gameSessionStatus) {
 		String destination = gameSessionBrokerPath + "/" + gameId + "/status-update";
-		simpMessagingTemplate.convertAndSend(destination, sudokuGameStatus);
+		simpMessagingTemplate.convertAndSend(destination, gameSessionStatus);
 	}
 
 	public void notifyForGameSessionBoardUpdate(String gameId, BoardUpdate boardUpdate) {
@@ -44,6 +45,16 @@ public class NotificationService {
 	public void notifyForGameSessionMessageUpdate(String gameId, String message) {
 		String destination = gameSessionBrokerPath + "/" + gameId + "/message-update";
 		simpMessagingTemplate.convertAndSend(destination, message);
+	}
+
+	public void notifyForGameSessionSubmissionVoteInitiated(String gameId, Player player) {
+		String destination = gameSessionBrokerPath + "/" + gameId + "/vote-initiated";
+		simpMessagingTemplate.convertAndSend(destination, player);
+	}
+
+	public void notifyForGameSessionSubmissionVoteCasted(String gameId, VoteRecord voteRecord) {
+		String destination = gameSessionBrokerPath + "/" + gameId + "/vote-casted";
+		simpMessagingTemplate.convertAndSend(destination, voteRecord);
 	}
 
 }
