@@ -22,9 +22,9 @@ public class GameSessionService {
 		this.notificationService = notificationService;
 	}
 
-	public GameSession createGameSession(String gameId, SudokuGame game, int timeLimit, int playerLimit) {
+	public GameSession createGameSession(String gameSessionId, SudokuGame game, int timeLimit, int playerLimit) {
 		GameSession gameSession = new GameSession(game, timeLimit, playerLimit);
-		gameSessionRepository.addGameSession(gameId, gameSession);
+		gameSessionRepository.addGameSession(gameSessionId, gameSession);
 
 		return gameSession;
 	}
@@ -36,44 +36,44 @@ public class GameSessionService {
 		return gameSessionManager;
 	}
 
-	public void startGame(String gameId) {
-		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameId);
+	public void startGame(String gameSessionId) {
+		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
 		gameSessionManager.startGame();
 	}
 
-	public void stopGame(String gameId) {
-		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameId);
+	public void stopGame(String gameSessionId) {
+		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
 		gameSessionManager.stopGame();
 	}
 
-	public void pauseGame(String gameId) {
-		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameId);
+	public void pauseGame(String gameSessionId) {
+		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
 		gameSessionManager.pauseGame();
 	}
 
-	public void resumeGame(String gameId) {
-		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameId);
+	public void resumeGame(String gameSessionId) {
+		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
 		gameSessionManager.resumeGame();
 	}
 
-	public void addBoardUpdate(String gameId, BoardUpdate boardUpdate) {
-		GameSession gameSession = gameSessionRepository.getGameSession(gameId);
+	public void addBoardUpdate(String gameSessionId, BoardUpdate boardUpdate) {
+		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
 		gameSession.addBoardUpdate(boardUpdate);
 	}
 
-	public List<BoardUpdate> getBoardUpdates(String gameId) {
-		GameSession gameSession = gameSessionRepository.getGameSession(gameId);
+	public List<BoardUpdate> getBoardUpdates(String gameSessionId) {
+		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
 
 		return gameSession.getBoardUpdates();
 	}
 
-	public void addGameChatMessage(String gameId, GameChatMessage gameChatMessage) {
-		GameSession gameSession = gameSessionRepository.getGameSession(gameId);
+	public void addGameChatMessage(String gameSessionId, GameChatMessage gameChatMessage) {
+		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
 		gameSession.addGameChatMessage(gameChatMessage);
 	}
 
-	public List<GameChatMessage> getGameChatMessages(String gameId) {
-		GameSession gameSession = gameSessionRepository.getGameSession(gameId);
+	public List<GameChatMessage> getGameChatMessages(String gameSessionId) {
+		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
 
 		return gameSession.getGameChatMessages();
 	}
