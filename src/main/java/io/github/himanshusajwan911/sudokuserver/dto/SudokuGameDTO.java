@@ -1,7 +1,7 @@
 package io.github.himanshusajwan911.sudokuserver.dto;
 
+import io.github.himanshusajwan911.sudokuserver.model.GameSessionStatus;
 import io.github.himanshusajwan911.sudokuserver.model.Player;
-import io.github.himanshusajwan911.sudokuserver.model.SudokuGame.SudokuGameStatus;
 import io.github.himanshusajwan911.sudokuserver.service.SudokuService.Level;
 
 public class SudokuGameDTO {
@@ -18,7 +18,7 @@ public class SudokuGameDTO {
 
 	private int playerLimit;
 
-	private SudokuGameStatus status;
+	private GameSessionStatus status;
 
 	private String gameId;
 
@@ -92,11 +92,11 @@ public class SudokuGameDTO {
 		this.playerLimit = playerLimit;
 	}
 
-	public SudokuGameStatus getStatus() {
+	public GameSessionStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(SudokuGameStatus status) {
+	public void setStatus(GameSessionStatus status) {
 		this.status = status;
 	}
 
