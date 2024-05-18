@@ -1,22 +1,21 @@
 package io.github.himanshusajwan911.sudokuserver.model;
 
 import io.github.himanshusajwan911.sudokuserver.dto.GameSessionDTO;
-import io.github.himanshusajwan911.sudokuserver.model.SudokuGame.SudokuGameStatus;
 
 public class JoinGameResponse {
 
-	SudokuGameStatus joinStatus;
+	JoinStatus joinStatus;
 
 	String statusMessage;
 
 	GameSessionDTO gameSession;
 
-	public SudokuGameStatus getJoinStatus() {
+	public JoinStatus getJoinStatus() {
 		return joinStatus;
 	}
 
-	public void setJoinStatus(SudokuGameStatus gameStatus) {
-		this.joinStatus = gameStatus;
+	public void setJoinStatus(JoinStatus joinStatus) {
+		this.joinStatus = joinStatus;
 	}
 
 	public String getStatusMessage() {
