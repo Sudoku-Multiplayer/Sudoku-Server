@@ -20,4 +20,16 @@ public class GameControllerAdvice {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 	}
 
+	@ExceptionHandler(GameNotStartedException.class)
+	public ResponseEntity<String> handleGameNotStartedException(GameNotStartedException ex) {
+
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.PRECONDITION_FAILED);
+	}
+
+	@ExceptionHandler(VoteInitializationException.class)
+	public ResponseEntity<String> handleVoteInitializationException(VoteInitializationException ex) {
+
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.PRECONDITION_FAILED);
+	}
+
 }
