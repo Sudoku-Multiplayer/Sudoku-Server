@@ -23,9 +23,9 @@ import io.github.himanshusajwan911.sudokuserver.model.CreateGameRequest;
 import io.github.himanshusajwan911.sudokuserver.model.CreateGameResponse;
 import io.github.himanshusajwan911.sudokuserver.model.GameSession;
 import io.github.himanshusajwan911.sudokuserver.model.JoinGameResponse;
+import io.github.himanshusajwan911.sudokuserver.model.JoinStatus;
 import io.github.himanshusajwan911.sudokuserver.model.Player;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame;
-import io.github.himanshusajwan911.sudokuserver.model.SudokuGame.SudokuGameStatus;
 import io.github.himanshusajwan911.sudokuserver.model.VoteRecord;
 import io.github.himanshusajwan911.sudokuserver.repository.GameRepository;
 import io.github.himanshusajwan911.sudokuserver.service.GameService;
@@ -83,8 +83,8 @@ public class GameController {
 
 		JoinGameResponse joinGameResponse = gameSessionService.joinGame(player, gameId);
 
-		if (joinGameResponse.getJoinStatus() == SudokuGameStatus.PLAYER_ADDED
-				|| joinGameResponse.getJoinStatus() == SudokuGameStatus.PLAYER_ALREADY_JOINED) {
+		if (joinGameResponse.getJoinStatus() == JoinStatus.PLAYER_ADDED
+				|| joinGameResponse.getJoinStatus() == JoinStatus.PLAYER_ALREADY_JOINED) {
 			notificationService.notifyForGameSessionPlayerJoined(gameId, player);
 		}
 
