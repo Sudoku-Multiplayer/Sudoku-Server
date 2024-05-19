@@ -13,11 +13,12 @@ import io.github.himanshusajwan911.sudokuserver.exception.GameAlreadyExistsExcep
 import io.github.himanshusajwan911.sudokuserver.exception.NoSuchGameExistsException;
 import io.github.himanshusajwan911.sudokuserver.model.BoardUpdate;
 import io.github.himanshusajwan911.sudokuserver.model.CreateGameRequest;
-import io.github.himanshusajwan911.sudokuserver.model.JoinGameResponse;
+import io.github.himanshusajwan911.sudokuserver.model.GameSession;
 import io.github.himanshusajwan911.sudokuserver.model.Player;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame;
 import io.github.himanshusajwan911.sudokuserver.model.SudokuGame.SudokuGameStatus;
 import io.github.himanshusajwan911.sudokuserver.repository.GameRepository;
+import io.github.himanshusajwan911.sudokuserver.repository.GameSessionRepository;
 import io.github.himanshusajwan911.sudokuserver.service.SudokuService.Level;
 
 @Service
@@ -31,6 +32,9 @@ public class GameService {
 
 	@Autowired
 	private GameSessionService gameSessionService;
+
+	@Autowired
+	private GameSessionRepository gameSessionRepository;
 
 	@Autowired
 	private NotificationService notificationService;
@@ -63,47 +67,6 @@ public class GameService {
 		gameRepository.removeGame(gameId);
 	}
 
-	public JoinGameResponse joinGame(Player player, String gameId) {
-
-		SudokuGame game = gameRepository.getGame(gameId);
-		JoinGameResponse joinGameResponse = new JoinGameResponse();
-
-		if (game == null) {
-			joinGameResponse.setGameStatus(SudokuGameStatus.NO_SUCH_GAME_EXISTS);
-			joinGameResponse.setStatusMessage("Game with id: " + gameId + " does not exists.");
-		}
-
-		else if (game.getPlayerCount() >= game.getPlayerLimit()) {
-			joinGameResponse.setGameStatus(SudokuGameStatus.FULL);
-			joinGameResponse.setStatusMessage("Game is full, cannot join.");
-		}
-
-		else if (game.getPlayers().contains(player)) {
-			joinGameResponse.setGameStatus(SudokuGameStatus.PLAYER_ALREADY_JOINED);
-			joinGameResponse.setStatusMessage("Player has already join this game.");
-			joinGameResponse.setGame(game);
-		}
-
-		else {
-			joinGameResponse.setGameStatus(SudokuGameStatus.PLAYER_ADDED);
-			joinGameResponse.setStatusMessage("Game joined successfully.");
-			joinGameResponse.setGame(game);
-			game.addPlayer(player);
-		}
-
-		return joinGameResponse;
-	}
-
-	public boolean leaveGame(Player player, String gameId) {
-
-		SudokuGame game = gameRepository.getGame(gameId);
-		if (game != null) {
-			return game.removePlayer(player);
-		}
-
-		return false;
-	}
-
 	private String createGameId(CreateGameRequest createGameRequest) {
 
 		Player player = createGameRequest.getPlayer();
@@ -133,6 +96,8 @@ public class GameService {
 		List<SudokuGameDTO> gamesList = new ArrayList<>();
 
 		for (SudokuGame game : gameRepository.getGames()) {
+			GameSession gameSession = gameSessionRepository.getGameSession(game.getGameId());
+
 			SudokuGameDTO gameDTO = new SudokuGameDTO();
 			gameDTO.setHostPlayer(game.getHostPlayer());
 			gameDTO.setGameName(game.getGameName());
@@ -140,9 +105,9 @@ public class GameService {
 			gameDTO.setCurrentBoard(game.getCurrentBoard());
 			gameDTO.setSolution(game.getSolution());
 			gameDTO.setLevel(game.getLevel());
-			gameDTO.setPlayerCount(game.getPlayerCount());
+			gameDTO.setPlayerCount(gameSession.getPlayerCount());
 			gameDTO.setPlayerLimit(game.getPlayerLimit());
-			gameDTO.setStatus(game.getStatus());
+			gameDTO.setStatus(gameSession.getGameSessionStatus());
 			gameDTO.setGameId(game.getGameId());
 			gameDTO.setBoardSize(game.getInitialBoard().length);
 
@@ -159,53 +124,6 @@ public class GameService {
 		}
 
 		return false;
-	}
-
-	public void updateBoard(String gameId, BoardUpdate boardUpdate) {
-
-		SudokuGame game = gameRepository.getGame(gameId);
-
-		if (game == null) {
-			throw new NoSuchGameExistsException("Game with id: " + gameId + " does not exists.");
-		}
-
-		if (game.getStatus() == SudokuGameStatus.RUNNING) {
-			game.updateCurrentBoard(boardUpdate.value, boardUpdate.row, boardUpdate.column);
-			gameSessionService.addBoardUpdate(gameId, boardUpdate);
-			notificationService.notifyForGameSessionBoardUpdate(gameId, boardUpdate);
-		}
-
-		else if (game.getStatus() == SudokuGameStatus.NEW) {
-			notificationService.notifyForGameSessionMessageUpdate(gameId,
-					"Cannot updated board, Game is not started yet.");
-		}
-
-		else if (game.getStatus() == SudokuGameStatus.PAUSED) {
-			notificationService.notifyForGameSessionMessageUpdate(gameId, "Cannot updated board, Game is Paused.");
-		}
-
-		else if (game.getStatus() == SudokuGameStatus.FINISHED) {
-			notificationService.notifyForGameSessionMessageUpdate(gameId, "Cannot updated board, Game is Finished.");
-		}
-	}
-
-	public List<BoardUpdate> getBoardUpdates(String gameId) {
-
-		if (!gameExists(gameId)) {
-			throw new NoSuchGameExistsException("Game with id: " + gameId + " does not exists.");
-		}
-
-		return gameSessionService.getBoardUpdates(gameId);
-	}
-
-	public List<Player> getJoinedPlayers(String gameId) {
-
-		SudokuGame game = gameRepository.getGame(gameId);
-		if (game == null) {
-			throw new NoSuchGameExistsException("Game with id: " + gameId + " does not exists.");
-		}
-
-		return game.getPlayers();
 	}
 
 }
