@@ -1,42 +1,46 @@
 package io.github.himanshusajwan911.sudokuserver.async;
 
-import io.github.himanshusajwan911.sudokuserver.model.SudokuGame;
-import io.github.himanshusajwan911.sudokuserver.model.SudokuGame.SudokuGameStatus;
+import io.github.himanshusajwan911.sudokuserver.model.GameSession;
+import io.github.himanshusajwan911.sudokuserver.model.GameSessionStatus;
 import io.github.himanshusajwan911.sudokuserver.service.NotificationService;
 
 public class GameSessionRunner implements Runnable {
 
-	private SudokuGame game;
+	private final Object gameSessionLock = new Object();
+
+	private GameSession gameSession;
 	private boolean isStopped;
 	private boolean isPaused;
 
 	private final NotificationService notificationService;
 
-	public GameSessionRunner(SudokuGame game, NotificationService notificationService) {
-		this.game = game;
+	public GameSessionRunner(GameSession gameSession, NotificationService notificationService) {
+		this.gameSession = gameSession;
 		this.notificationService = notificationService;
 	}
 
 	@Override
 	public void run() {
 
-		synchronized (game) {
+		synchronized (gameSessionLock) {
 
 			while (!isStopped) {
 
 				while (isPaused) {
 					try {
-						game.wait();
+						gameSessionLock.wait();
 					} catch (InterruptedException e) {
 						isStopped = true;
-						game.setStatus(SudokuGameStatus.FINISHED);
-						notificationService.notifyForGameSessionStatusUpdate(game.getGameId(), game.getStatus());
+						gameSession.setGameSessionStatus(GameSessionStatus.FINISHED);
+						notificationService.notifyForGameSessionStatusUpdate(gameSession.getSessionId(),
+								gameSession.getGameSessionStatus());
+
 						e.printStackTrace();
 					}
 				}
 
-				System.out.println(game.getGameId() + " runnig." + game.getRemainingTime());
-				notificationService.notifyForGameSessionTimeUpdate(game.getGameId(), game.getRemainingTime());
+				notificationService.notifyForGameSessionTimeUpdate(gameSession.getSessionId(),
+						gameSession.getRemainingTime());
 
 				try {
 					Thread.sleep(1000);
@@ -44,12 +48,14 @@ public class GameSessionRunner implements Runnable {
 					e.printStackTrace();
 				}
 
-				game.decreaseRemainingTime(1);
+				gameSession.decreaseRemainingTime(1);
 
-				if (game.getRemainingTime() <= 0) {
-					game.setStatus(SudokuGameStatus.FINISHED);
-					notificationService.notifyForGameSessionStatusUpdate(game.getGameId(), game.getStatus());
+				if (gameSession.getRemainingTime() <= 0) {
+					gameSession.setGameSessionStatus(GameSessionStatus.FINISHED);
+					notificationService.notifyForGameSessionStatusUpdate(gameSession.getSessionId(),
+							gameSession.getGameSessionStatus());
 					isStopped = true;
+
 					break;
 				}
 			}
@@ -58,24 +64,27 @@ public class GameSessionRunner implements Runnable {
 
 	public void pauseGame() {
 		isPaused = true;
-		game.setStatus(SudokuGameStatus.PAUSED);
-		notificationService.notifyForGameSessionStatusUpdate(game.getGameId(), game.getStatus());
+		gameSession.setGameSessionStatus(GameSessionStatus.PAUSED);
+		notificationService.notifyForGameSessionStatusUpdate(gameSession.getSessionId(),
+				gameSession.getGameSessionStatus());
 	}
 
 	public void resumeGame() {
 
-		synchronized (game) {
-			game.notify();
+		synchronized (gameSessionLock) {
+			gameSessionLock.notify();
 			isPaused = false;
-			game.setStatus(SudokuGameStatus.RUNNING);
-			notificationService.notifyForGameSessionStatusUpdate(game.getGameId(), game.getStatus());
+			gameSession.setGameSessionStatus(GameSessionStatus.RUNNING);
+			notificationService.notifyForGameSessionStatusUpdate(gameSession.getSessionId(),
+					gameSession.getGameSessionStatus());
 		}
 	}
 
 	public void stopGame() {
 		isStopped = true;
-		game.setStatus(SudokuGameStatus.FINISHED);
-		notificationService.notifyForGameSessionStatusUpdate(game.getGameId(), game.getStatus());
+		gameSession.setGameSessionStatus(GameSessionStatus.FINISHED);
+		notificationService.notifyForGameSessionStatusUpdate(gameSession.getSessionId(),
+				gameSession.getGameSessionStatus());
 	}
 
 }
