@@ -50,6 +50,10 @@ public class GameSessionRunner implements Runnable {
 
 				gameSession.decreaseRemainingTime(1);
 
+				if (gameSession.getVoteSession().getVoteCooldownTimer() > 0) {
+					gameSession.getVoteSession().decreaseVoteCooldownTimer(1);
+				}
+
 				if (gameSession.getRemainingTime() <= 0) {
 					gameSession.setGameSessionStatus(GameSessionStatus.FINISHED);
 					notificationService.notifyForGameSessionStatusUpdate(gameSession.getSessionId(),
