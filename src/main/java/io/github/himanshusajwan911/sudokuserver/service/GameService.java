@@ -31,13 +31,7 @@ public class GameService {
 	private GameRepository gameRepository;
 
 	@Autowired
-	private GameSessionService gameSessionService;
-
-	@Autowired
 	private GameSessionRepository gameSessionRepository;
-
-	@Autowired
-	private NotificationService notificationService;
 
 	public String createGame(CreateGameRequest createGameRequest) {
 
