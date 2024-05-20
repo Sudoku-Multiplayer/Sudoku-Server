@@ -24,14 +24,18 @@ import io.github.himanshusajwan911.sudokuserver.service.SudokuService.Level;
 @Service
 public class GameService {
 
-	@Autowired
 	private SudokuService sudokuService;
 
-	@Autowired
 	private GameRepository gameRepository;
 
-	@Autowired
 	private GameSessionRepository gameSessionRepository;
+
+	public GameService(SudokuService sudokuService, GameRepository gameRepository,
+			GameSessionRepository gameSessionRepository) {
+		this.sudokuService = sudokuService;
+		this.gameRepository = gameRepository;
+		this.gameSessionRepository = gameSessionRepository;
+	}
 
 	public String createGame(CreateGameRequest createGameRequest) {
 
