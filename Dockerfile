@@ -16,4 +16,4 @@ ARG _DB_PASS
 ARG _DB_NAME
 
 EXPOSE ${SERVER_PORT}
-ENTRYPOINT ["java", "-DSERVER_PORT=${_SERVER_PORT}", "-DDB_HOST=${_DB_HOST}", "-DDB_PORT=${_DB_PORT}", "-DDB_USERNAME=${_DB_USERNAME}", "-DDB_PASSWORD=${_DB_PASS}", "-DDB_NAME=${_DB_NAME}", "-jar", "sudoku-server.jar", "--spring.profiles.active=${SPRING_PROFILE}"]
+ENTRYPOINT ["java", "-DSERVER_PORT=${_SERVER_PORT}", "-DDB_HOST=${_DB_HOST}", "-DDB_PORT=${_DB_PORT}", "-DDB_USERNAME=${_DB_USERNAME}", "-DDB_PASSWORD=${_DB_PASS}", "-DDB_NAME=${_DB_NAME}", "-jar", "sudoku-server.jar", "--spring.profiles.active=${_SPRING_PROFILE}"]
