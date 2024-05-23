@@ -7,5 +7,6 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-jdk-alpine
 COPY --from=build /target/sudoku-server-0.0.1-SNAPSHOT.jar sudoku-server.jar
 ARG SERVER_PORT
+ARG SPRING_PROFILE
 EXPOSE ${SERVER_PORT}
-ENTRYPOINT ["java", "-jar","sudoku-server.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-jar","sudoku-server.jar", "--spring.profiles.active=${SPRING_PROFILE}}}"]
