@@ -7,13 +7,13 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-jdk-alpine
 COPY --from=build /target/sudoku-server-0.0.1-SNAPSHOT.jar sudoku-server.jar
 
-ARG SERVER_PORT
-ARG SPRING_PROFILE
-ARG DB_HOST
-ARG DB_PORT
-ARG DB_USERNAME
-ARG DB_PASS
-ARG DB_NAME
+ARG _SERVER_PORT
+ARG _SPRING_PROFILE
+ARG _DB_HOST
+ARG _DB_PORT
+ARG _DB_USERNAME
+ARG _DB_PASS
+ARG _DB_NAME
 
 EXPOSE ${SERVER_PORT}
-ENTRYPOINT ["java", "-DSERVER_PORT=${SERVER_PORT}", "-DDB_HOST=${DB_HOST}", "-DDB_PORT=${DB_PORT}", "-DDB_USERNAME=${DB_USERNAME}", "-DDB_PASSWORD=${DB_PASS}", "-DDB_NAME=${DB_NAME}", "-jar", "sudoku-server.jar", "--spring.profiles.active=${SPRING_PROFILE}"]
+ENTRYPOINT ["java", "-DSERVER_PORT=${_SERVER_PORT}", "-DDB_HOST=${_DB_HOST}", "-DDB_PORT=${_DB_PORT}", "-DDB_USERNAME=${_DB_USERNAME}", "-DDB_PASSWORD=${_DB_PASS}", "-DDB_NAME=${_DB_NAME}", "-jar", "sudoku-server.jar", "--spring.profiles.active=${SPRING_PROFILE}"]
