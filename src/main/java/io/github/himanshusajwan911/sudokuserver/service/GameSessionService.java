@@ -45,21 +45,41 @@ public class GameSessionService {
 
 	public void startGame(String gameSessionId) {
 		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
+
+		if (gameSessionManager == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
 		gameSessionManager.startGame();
 	}
 
 	public void stopGame(String gameSessionId) {
 		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
+
+		if (gameSessionManager == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
 		gameSessionManager.stopGame();
 	}
 
 	public void pauseGame(String gameSessionId) {
 		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
+
+		if (gameSessionManager == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
 		gameSessionManager.pauseGame();
 	}
 
 	public void resumeGame(String gameSessionId) {
 		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
+
+		if (gameSessionManager == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
 		gameSessionManager.resumeGame();
 	}
 
@@ -102,6 +122,7 @@ public class GameSessionService {
 
 	public boolean leaveGame(Player player, String gameSessionId) {
 		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
+
 		if (gameSession != null) {
 			return gameSession.removePlayer(player);
 		}
@@ -110,8 +131,8 @@ public class GameSessionService {
 	}
 
 	public List<Player> getJoinedPlayers(String gameSessionId) {
-
 		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
+
 		if (gameSession == null) {
 			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
 		}
@@ -151,33 +172,61 @@ public class GameSessionService {
 
 	public void addBoardUpdate(String gameSessionId, BoardUpdate boardUpdate) {
 		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
+
+		if (gameSession == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
 		gameSession.addBoardUpdate(boardUpdate);
 	}
 
 	public List<BoardUpdate> getBoardUpdates(String gameSessionId) {
 		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
 
+		if (gameSession == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
 		return gameSession.getBoardUpdates();
 	}
 
 	public void addGameChatMessage(String gameSessionId, GameChatMessage gameChatMessage) {
 		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
+
+		if (gameSession == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
 		gameSession.addGameChatMessage(gameChatMessage);
 	}
 
 	public List<GameChatMessage> getGameChatMessages(String gameSessionId) {
 		GameSession gameSession = gameSessionRepository.getGameSession(gameSessionId);
 
+		if (gameSession == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
 		return gameSession.getGameChatMessages();
 	}
 
 	public void initiateGameSubmitVoting(String gameSessionId, Player player) {
 		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
+
+		if (gameSessionManager == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
 		gameSessionManager.initiateGameSubmitVoting(player);
 	}
 
 	public void castGameSubmitVote(String gameSessionId, VoteRecord voteRecord) {
 		GameSessionManager gameSessionManager = gameSessionRepository.getGameSessionManager(gameSessionId);
+
+		if (gameSessionManager == null) {
+			throw new NoSuchGameExistsException("Game with id: " + gameSessionId + " does not exists.");
+		}
+
 		gameSessionManager.castGameSubmitVote(voteRecord);
 	}
 
