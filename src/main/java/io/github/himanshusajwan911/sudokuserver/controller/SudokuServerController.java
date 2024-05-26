@@ -1,5 +1,6 @@
 package io.github.himanshusajwan911.sudokuserver.controller;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.github.himanshusajwan911.sudokuserver.exception.InvalidLevelException;
 import io.github.himanshusajwan911.sudokuserver.exception.NoSolutionException;
 import io.github.himanshusajwan911.sudokuserver.model.GameBoard;
+import io.github.himanshusajwan911.sudokuserver.model.Player;
 import io.github.himanshusajwan911.sudokuserver.service.SudokuService;
 import io.github.himanshusajwan911.sudokuserver.service.SudokuService.Level;
 import io.github.himanshusajwan911.sudokuserver.service.WebSocketSessionService;
@@ -115,6 +117,12 @@ public class SudokuServerController {
 	@GetMapping("/online-player-count")
 	public ResponseEntity<Integer> getOnlinePlayerCount() {
 		return new ResponseEntity<Integer>(webSocketSessionService.getOnlinePlayerCount(), HttpStatus.OK);
+	}
+
+	@CrossOrigin("*")
+	@GetMapping("/online-players")
+	public ResponseEntity<List<Player>> getOnlinePlayers() {
+		return new ResponseEntity<>(webSocketSessionService.getOnlinePlayers(), HttpStatus.OK);
 	}
 
 }
