@@ -1,10 +1,7 @@
 package io.github.himanshusajwan911.sudokuserver.model;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
 import io.github.himanshusajwan911.sudokuserver.util.Util;
 
 public class GameSession {
@@ -30,7 +27,7 @@ public class GameSession {
 	private List<GameChatMessage> gameChatMessages;
 	private List<BoardUpdate> boardUpdates;
 
-	private Map<Player, PlayerSession> playerSessionMap;
+	private List<Player> players;
 
 	public GameSession(SudokuGame game, int timeLimit, int playerLimit) {
 		this.game = game;
@@ -43,7 +40,7 @@ public class GameSession {
 		this.voteSession = new VoteSession();
 		this.gameChatMessages = new ArrayList<>();
 		this.boardUpdates = new ArrayList<>();
-		this.playerSessionMap = new LinkedHashMap<>();
+		this.players = new ArrayList<>();
 	}
 
 	public String getSessionId() {
@@ -109,28 +106,22 @@ public class GameSession {
 	}
 
 	public synchronized void addPlayer(Player player) {
-		PlayerSession playerSession = new PlayerSession();
-		playerSession.setPlayer(player);
-		playerSession.setVoteStatus(VoteStatus.WAITING);
+		players.add(player);
 		voteSession.addVoter(player);
-
-		playerSessionMap.put(player, playerSession);
 	}
 
 	public boolean removePlayer(Player player) {
-		PlayerSession playerSession = playerSessionMap.remove(player);
-		Player removedPlayer = playerSession.getPlayer();
 		voteSession.removeVoter(player);
 
-		return player.equals(removedPlayer);
+		return players.remove(player);
 	}
 
 	public synchronized List<Player> getJoinedPlayers() {
-		return new ArrayList<Player>(playerSessionMap.keySet());
+		return new ArrayList<>(players);
 	}
 
 	public synchronized int getPlayerCount() {
-		return playerSessionMap.size();
+		return players.size();
 	}
 
 	public void addGameChatMessage(GameChatMessage gameChatMessage) {
