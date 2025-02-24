@@ -34,6 +34,12 @@ public class GameSession {
 		this.timeLimit = timeLimit;
 		this.remainingTime = timeLimit;
 		this.playerLimit = playerLimit;
+
+		initializeGameSession();
+	}
+
+	private void initializeGameSession() {
+
 		this.sessionId = game.getGameId();
 		this.gameSessionStatus = GameSessionStatus.NEW;
 		this.gameBoard = Util.clone2DArray(game.getInitialBoard());
@@ -41,6 +47,7 @@ public class GameSession {
 		this.gameChatMessages = new ArrayList<>();
 		this.boardUpdates = new ArrayList<>();
 		this.players = new ArrayList<>();
+
 	}
 
 	public String getSessionId() {
