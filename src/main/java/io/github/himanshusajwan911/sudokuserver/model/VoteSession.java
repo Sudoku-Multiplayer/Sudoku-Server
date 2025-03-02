@@ -13,6 +13,8 @@ public class VoteSession {
 
 	private Map<Player, VoteRecord> votersMap;
 
+	private int voteCooldownTime;
+
 	private int voteCooldownTimer;
 
 	private int acceptedCount;
@@ -20,8 +22,16 @@ public class VoteSession {
 	private int rejectedCount;
 
 	public VoteSession() {
-		votersMap = new HashMap<>();
-		voteCooldownTimer = DEFAULT_VOTE_COOLDOWN_TIME;
+		this.votersMap = new HashMap<>();
+		this.voteCooldownTime = DEFAULT_VOTE_COOLDOWN_TIME;
+		this.voteCooldownTimer = DEFAULT_VOTE_COOLDOWN_TIME;
+	}
+
+	public VoteSession(int voteCooldownTime) {
+		super();
+		this.votersMap = new HashMap<>();
+		this.voteCooldownTime = voteCooldownTime;
+		this.voteCooldownTimer = voteCooldownTime;
 	}
 
 	public Player getVoteInitiator() {
@@ -66,7 +76,7 @@ public class VoteSession {
 	}
 
 	public void resetVoteCooldownTimer() {
-		voteCooldownTimer = DEFAULT_VOTE_COOLDOWN_TIME;
+		voteCooldownTimer = voteCooldownTime;
 	}
 
 	public int getAcceptedCount() {
