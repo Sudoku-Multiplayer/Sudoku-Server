@@ -104,7 +104,7 @@ public class VoteSession {
 			++acceptedCount;
 		}
 
-		else if (voteRecord.getVoteStatus() == VoteStatus.ACCEPTED) {
+		else if (voteRecord.getVoteStatus() == VoteStatus.REJECTED) {
 			++rejectedCount;
 		}
 
